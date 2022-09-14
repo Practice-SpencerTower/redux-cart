@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialCartState = {
     cartVisible: false,
+    cartItems: [],
 };
 const cartSlice = createSlice({
     name: 'cart',
@@ -12,6 +13,10 @@ const cartSlice = createSlice({
         },
         hideCart(state) {
             state.cartVisible = false;
+        },
+        addToCart(state, payload) {
+            state.cartItems = [...state.cartItems, payload];
+            console.log('CART ITEMS', state.cartItems);
         },
     },
 });
