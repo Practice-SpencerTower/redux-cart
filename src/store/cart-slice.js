@@ -15,14 +15,19 @@ const cartSlice = createSlice({
             state.cartVisible = false;
         },
         addToCart(state, payload) {
-            state.cartItems.length &&
-                state.cartItems.forEach((item) => {
-                    if (item.type === payload.type) {
-                        item.count += 1;
-                        return;
-                    }
-                });
+            let itemInCart = false;
+            state.cartItems.forEach((item) => {
+                if (item.title === payload.payload.title) {
+                    console.log('TRUE');
+                    item.quantity += 1;
+                    itemInCart = true;
+
+                    return;
+                }
+            });
+            if (itemInCart) return;
             // add to cart if not present
+            console.log('NEW ITEM ADDED');
             state.cartItems = [...state.cartItems, payload.payload];
             console.log('CART ITEMS', state.cartItems);
         },
