@@ -8,9 +8,11 @@ const ProductItem = (props) => {
     const { title, price, description } = props;
 
     const addToCartHandler = () => {
-        console.log({ title, price, description });
+        console.log({ title, price, description, quantity: 1 });
         // may not work
-        dispatch(cartActions.addToCart({ title, price, description }));
+        dispatch(
+            cartActions.addToCart({ title, price, description, quantity: 1 })
+        );
     };
 
     return (
@@ -22,12 +24,7 @@ const ProductItem = (props) => {
                 </header>
                 <p>{description}</p>
                 <div className={classes.actions}>
-                    <button
-                        value={{ title, price, description }}
-                        onClick={addToCartHandler}
-                    >
-                        Add to Cart
-                    </button>
+                    <button onClick={addToCartHandler}>Add to Cart</button>
                 </div>
             </Card>
         </li>
