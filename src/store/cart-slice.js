@@ -18,10 +18,8 @@ const cartSlice = createSlice({
             let itemInCart = false;
             state.cartItems.forEach((item) => {
                 if (item.title === payload.payload.title) {
-                    console.log('TRUE');
                     item.quantity += 1;
                     itemInCart = true;
-
                     return;
                 }
             });
@@ -30,6 +28,24 @@ const cartSlice = createSlice({
             console.log('NEW ITEM ADDED');
             state.cartItems = [...state.cartItems, payload.payload];
             console.log('CART ITEMS', state.cartItems);
+        },
+        removeFromCart(state, payload) {
+            // find item index in cart
+            let itemIndex = state.cartItems.findIndex(
+                (item) => item.type === payload.type
+            );
+            let item = state.cartItems[itemIndex];
+            let updatedItems;
+            if (item.quantity === 1) {
+                updatedItems = state.cartItems.filter(
+                    (item) => item.title !== payload.payload.title
+                );
+            } else {
+                // keep item in cart but decrease amount
+            }
+            return {
+                cartItems: updatedItems,
+            };
         },
     },
 });
