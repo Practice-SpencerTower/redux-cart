@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialCartState = {
     cartVisible: false,
     cartItems: [],
+    totalAmount: 0,
 };
 const cartSlice = createSlice({
     name: 'cart',
@@ -15,6 +16,8 @@ const cartSlice = createSlice({
             state.cartVisible = false;
         },
         addToCart(state, payload) {
+            console.log('TotalAmount', state.totalAmount);
+            state.totalAmount = state.totalAmount + payload.payload.price;
             let itemInCart = false;
             state.cartItems.forEach((item) => {
                 if (item.title === payload.payload.title) {
@@ -32,9 +35,10 @@ const cartSlice = createSlice({
         removeFromCart(state, payload) {
             // find item index in cart
             let itemIndex = state.cartItems.findIndex(
-                (item) => item.type === payload.type
+                (item) => item.type === payload.payload.type
             );
             let item = state.cartItems[itemIndex];
+            console.log('ITEM IN REMOVE', item);
             let updatedItems;
             if (item.quantity === 1) {
                 updatedItems = state.cartItems.filter(
@@ -46,12 +50,10 @@ const cartSlice = createSlice({
                     ...item,
                     quantity: item.quantity--,
                 };
-                updatedItems = [...state.cartItems];
+                // updatedItems = [...state.cartItems];
                 updatedItems[itemIndex] = updatedItem;
+                console.log('UPDATED ITEMS', updatedItems);
             }
-            return {
-                cartItems: updatedItems,
-            };
         },
     },
 });
