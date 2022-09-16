@@ -52,6 +52,7 @@ const cartSlice = createSlice({
             } else {
                 // keep item in cart but decrease amount
                 item.quantity = item.quantity - 1;
+                item.total -= item.price;
                 state.cartItems[itemIndex] = item;
                 console.log('UPDATED ITEMS', state.cartItems);
             }
