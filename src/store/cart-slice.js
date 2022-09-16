@@ -24,6 +24,7 @@ const cartSlice = createSlice({
             state.cartItems.forEach((item) => {
                 if (item.title === payload.payload.title) {
                     item.quantity += 1;
+                    item.total += item.price;
                     itemInCart = true;
                     return;
                 }
@@ -37,6 +38,8 @@ const cartSlice = createSlice({
         removeFromCart(state, payload) {
             // find item index in cart
             state.numItems -= 1;
+            state.totalAmount -= payload.payload.price;
+            console.log('TotalAmount', state.totalAmount);
             let itemIndex = state.cartItems.findIndex(
                 (item) => item.type === payload.payload.type
             );

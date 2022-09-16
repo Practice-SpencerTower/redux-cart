@@ -11,7 +11,13 @@ const ProductItem = (props) => {
         console.log({ title, price, description, quantity: 1 });
         // may not work
         dispatch(
-            cartActions.addToCart({ title, price, description, quantity: 1 })
+            cartActions.addToCart({
+                title,
+                total: price,
+                price,
+                description,
+                quantity: 1,
+            })
         );
     };
 

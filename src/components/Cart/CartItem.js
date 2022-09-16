@@ -5,12 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 const CartItem = (props) => {
     const dispatch = useDispatch();
     const { title, quantity, total, price } = props.item;
+    console.log('ITEM in CART', title, total, price);
 
     const removeItemHandler = () => {
         dispatch(cartActions.removeFromCart({ title, quantity, total, price }));
     };
 
     const addItemHandler = () => {
+        console.log('TOTAL', total);
         dispatch(
             cartActions.addToCart({
                 title,
@@ -26,7 +28,7 @@ const CartItem = (props) => {
             <header>
                 <h3>{title}</h3>
                 <div className={classes.price}>
-                    {/* ${total.toFixed(2)}{' '} */}
+                    ${Number(total)}
                     <span className={classes.itemprice}>
                         {/* (${price.toFixed(2)}/item) */}
                     </span>
