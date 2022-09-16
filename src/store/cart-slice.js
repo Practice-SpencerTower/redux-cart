@@ -39,20 +39,16 @@ const cartSlice = createSlice({
             );
             let item = state.cartItems[itemIndex];
             console.log('ITEM IN REMOVE', item);
-            let updatedItems;
             if (item.quantity === 1) {
-                updatedItems = state.cartItems.filter(
+                state.cartItems = state.cartItems.filter(
                     (item) => item.title !== payload.payload.title
                 );
             } else {
                 // keep item in cart but decrease amount
-                const updatedItem = {
-                    ...item,
-                    quantity: item.quantity--,
-                };
+                item.quantity = item.quantity - 1;
                 // updatedItems = [...state.cartItems];
-                updatedItems[itemIndex] = updatedItem;
-                console.log('UPDATED ITEMS', updatedItems);
+                state.cartItems[itemIndex] = item;
+                console.log('UPDATED ITEMS', state.cartItems);
             }
         },
     },
