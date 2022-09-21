@@ -16,13 +16,13 @@ const cartSlice = createSlice({
         hideCart(state) {
             state.cartVisible = false;
         },
-        addToCart(state, payload) {
+        addToCart(state, action) {
             state.numItems += 1;
             console.log('TotalAmount', state.totalAmount);
-            state.totalAmount = state.totalAmount + payload.payload.price;
+            state.totalAmount = state.totalAmount + action.payload.price;
             let itemInCart = false;
             state.cartItems.forEach((item) => {
-                if (item.title === payload.payload.title) {
+                if (item.title === action.payload.title) {
                     item.quantity += 1;
                     item.total += item.price;
                     itemInCart = true;
@@ -32,22 +32,22 @@ const cartSlice = createSlice({
             if (itemInCart) return;
             // add to cart if not present
             console.log('NEW ITEM ADDED');
-            state.cartItems = [...state.cartItems, payload.payload];
+            state.cartItems = [...state.cartItems, action.payload];
             console.log('CART ITEMS', state.cartItems);
         },
-        removeFromCart(state, payload) {
+        removeFromCart(state, action) {
             // find item index in cart
             state.numItems -= 1;
-            state.totalAmount -= payload.payload.price;
+            state.totalAmount -= action.payload.price;
             console.log('TotalAmount', state.totalAmount);
             let itemIndex = state.cartItems.findIndex(
-                (item) => item.type === payload.payload.type
+                (item) => item.type === action.payload.type
             );
             let item = state.cartItems[itemIndex];
             console.log('ITEM IN REMOVE', item);
             if (item.quantity === 1) {
                 state.cartItems = state.cartItems.filter(
-                    (item) => item.title !== payload.payload.title
+                    (item) => item.title !== action.payload.title
                 );
             } else {
                 // keep item in cart but decrease amount
