@@ -20,19 +20,32 @@ const cartSlice = createSlice({
             state.numItems += 1;
             console.log('TotalAmount', state.totalAmount);
             state.totalAmount = state.totalAmount + action.payload.price;
-            let itemInCart = false;
-            state.cartItems.forEach((item) => {
-                if (item.title === action.payload.title) {
-                    item.quantity += 1;
-                    item.total += item.price;
-                    itemInCart = true;
-                    return;
-                }
-            });
-            if (itemInCart) return;
+            const newItem = action.payload;
+            const existingItem = state.cartItems.find(
+                (item) => item.id === newItem.id
+            );
+            if (!existingItem) {
+                state.cartItems.push({
+                    itemId: newItem.id,
+                    price: newItem.price,
+                    quantity: 1,
+                    totalPrice: newItem.price,
+                    name: newItem.price,
+                });
+            } else {
+                existingItem.quantity++;
+                existingItem.totalPrice =
+                    existingItem.totalPrice + newItem.price;
+            }
+            // state.cartItems.forEach((item) => {
+            //     if (item.title === action.payload.title) {
+            //         item.quantity++;
+            //         item.total += item.price;
+            //         return;
+            //     }
+            // });
             // add to cart if not present
             console.log('NEW ITEM ADDED');
-            state.cartItems = [...state.cartItems, action.payload];
             console.log('CART ITEMS', state.cartItems);
         },
         removeFromCart(state, action) {
@@ -40,10 +53,10 @@ const cartSlice = createSlice({
             state.numItems -= 1;
             state.totalAmount -= action.payload.price;
             console.log('TotalAmount', state.totalAmount);
-            let itemIndex = state.cartItems.findIndex(
+            const itemIndex = state.cartItems.findIndex(
                 (item) => item.type === action.payload.type
             );
-            let item = state.cartItems[itemIndex];
+            const item = state.cartItems[itemIndex];
             console.log('ITEM IN REMOVE', item);
             if (item.quantity === 1) {
                 state.cartItems = state.cartItems.filter(
@@ -51,7 +64,7 @@ const cartSlice = createSlice({
                 );
             } else {
                 // keep item in cart but decrease amount
-                item.quantity = item.quantity - 1;
+                item.quantity--;
                 item.total -= item.price;
                 state.cartItems[itemIndex] = item;
                 console.log('UPDATED ITEMS', state.cartItems);
