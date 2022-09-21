@@ -37,14 +37,6 @@ const cartSlice = createSlice({
                 existingItem.totalPrice =
                     existingItem.totalPrice + newItem.price;
             }
-            // state.cartItems.forEach((item) => {
-            //     if (item.title === action.payload.title) {
-            //         item.quantity++;
-            //         item.total += item.price;
-            //         return;
-            //     }
-            // });
-            // add to cart if not present
             console.log('NEW ITEM ADDED');
             console.log('CART ITEMS', state.cartItems);
         },
@@ -65,7 +57,7 @@ const cartSlice = createSlice({
             } else {
                 // keep item in cart but decrease amount
                 item.quantity--;
-                item.total -= item.price;
+                item.totalPrice -= item.price;
                 state.cartItems[itemIndex] = item;
                 console.log('UPDATED ITEMS', state.cartItems);
             }
