@@ -4,7 +4,7 @@ const initialCartState = {
     cartVisible: false,
     cartItems: [],
     totalAmount: 0,
-    numItems: 0,
+    totalQuantity: 0,
 };
 const cartSlice = createSlice({
     name: 'cart',
@@ -17,48 +17,46 @@ const cartSlice = createSlice({
             state.cartVisible = false;
         },
         addToCart(state, action) {
-            state.numItems += 1;
-            console.log('TotalAmount', state.totalAmount);
-            state.totalAmount = state.totalAmount + action.payload.price;
+            state.totalQuantity += 1;
             const newItem = action.payload;
+            console.log('TotalAmount', state.totalAmount);
+            state.totalAmount = state.totalAmount + newItem.price;
             const existingItem = state.cartItems.find(
                 (item) => item.id === newItem.id
             );
             if (!existingItem) {
+                console.log('Item not found!!! New Item Created');
+                console.log('CART: ', state.cartItems);
                 state.cartItems.push({
-                    itemId: newItem.id,
+                    id: newItem.id,
                     price: newItem.price,
                     quantity: 1,
                     totalPrice: newItem.price,
-                    name: newItem.price,
+                    title: newItem.title,
                 });
             } else {
                 existingItem.quantity++;
                 existingItem.totalPrice =
                     existingItem.totalPrice + newItem.price;
             }
-            console.log('NEW ITEM ADDED');
             console.log('CART ITEMS', state.cartItems);
         },
         removeFromCart(state, action) {
             // find item index in cart
-            state.numItems -= 1;
+            state.totalQuantity--;
             state.totalAmount -= action.payload.price;
-            console.log('TotalAmount', state.totalAmount);
-            const itemIndex = state.cartItems.findIndex(
-                (item) => item.type === action.payload.type
+            const existingItem = state.cartItems.find(
+                (item) => item.id === action.payload.id
             );
-            const item = state.cartItems[itemIndex];
-            console.log('ITEM IN REMOVE', item);
-            if (item.quantity === 1) {
+            console.log('REMOVE ITEM', existingItem);
+            if (existingItem.quantity === 1) {
                 state.cartItems = state.cartItems.filter(
-                    (item) => item.title !== action.payload.title
+                    (item) => item.id !== action.payload.id
                 );
             } else {
                 // keep item in cart but decrease amount
-                item.quantity--;
-                item.totalPrice -= item.price;
-                state.cartItems[itemIndex] = item;
+                existingItem.quantity--;
+                existingItem.totalPrice -= existingItem.price;
                 console.log('UPDATED ITEMS', state.cartItems);
             }
         },

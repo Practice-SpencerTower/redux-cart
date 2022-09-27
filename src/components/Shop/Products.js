@@ -8,6 +8,12 @@ const DUMMY_ITEMS = [
         price: 6,
         description: 'This is a first product - amazing!',
     },
+    {
+        id: 2,
+        title: 'Test 2',
+        price: 7,
+        description: 'This is a second product - sublime!',
+    },
 ];
 
 const Products = (props) => {
