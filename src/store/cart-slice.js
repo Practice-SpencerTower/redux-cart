@@ -45,6 +45,14 @@ const cartSlice = createSlice({
             // find item index in cart
             state.totalQuantity--;
             state.totalAmount -= action.payload.price;
+            // let existingItem;
+            // state.cartItems.forEach((item) => {
+            //     console.log('ITEM', item);
+            //     if (item.id === action.payload.id) {
+            //         existingItem = item;
+            //     }
+            // });
+            // console.log('existingItem', existingItem);
             const existingItem = state.cartItems.find(
                 (item) => item.id === action.payload.id
             );
@@ -59,6 +67,7 @@ const cartSlice = createSlice({
                 existingItem.totalPrice -= existingItem.price;
                 console.log('UPDATED ITEMS', state.cartItems);
             }
+            console.log(state);
         },
     },
 });

@@ -8,7 +8,8 @@ const CartItem = (props) => {
     console.log('ITEM in CART', title, total, price);
 
     const removeItemHandler = () => {
-        dispatch(cartActions.removeFromCart(id));
+        console.log('ID: ', id, 'TITLE: ', title);
+        dispatch(cartActions.removeFromCart({ id }));
     };
 
     const addItemHandler = () => {
