@@ -4,7 +4,7 @@ const initialCartState = {
     cartVisible: false,
     cartItems: [],
     totalAmount: 0,
-    numItems: 0,
+    totalQuantity: 0,
 };
 const cartSlice = createSlice({
     name: 'cart',
@@ -16,46 +16,58 @@ const cartSlice = createSlice({
         hideCart(state) {
             state.cartVisible = false;
         },
-        addToCart(state, payload) {
-            state.numItems += 1;
+        addToCart(state, action) {
+            state.totalQuantity += 1;
+            const newItem = action.payload;
             console.log('TotalAmount', state.totalAmount);
-            state.totalAmount = state.totalAmount + payload.payload.price;
-            let itemInCart = false;
-            state.cartItems.forEach((item) => {
-                if (item.title === payload.payload.title) {
-                    item.quantity += 1;
-                    item.total += item.price;
-                    itemInCart = true;
-                    return;
-                }
-            });
-            if (itemInCart) return;
-            // add to cart if not present
-            console.log('NEW ITEM ADDED');
-            state.cartItems = [...state.cartItems, payload.payload];
+            state.totalAmount = state.totalAmount + newItem.price;
+            const existingItem = state.cartItems.find(
+                (item) => item.id === newItem.id
+            );
+            if (!existingItem) {
+                console.log('Item not found!!! New Item Created');
+                console.log('CART: ', state.cartItems);
+                state.cartItems.push({
+                    id: newItem.id,
+                    price: newItem.price,
+                    quantity: 1,
+                    totalPrice: newItem.price,
+                    title: newItem.title,
+                });
+            } else {
+                existingItem.quantity++;
+                existingItem.totalPrice =
+                    existingItem.totalPrice + newItem.price;
+            }
             console.log('CART ITEMS', state.cartItems);
         },
-        removeFromCart(state, payload) {
+        removeFromCart(state, action) {
             // find item index in cart
-            state.numItems -= 1;
-            state.totalAmount -= payload.payload.price;
-            console.log('TotalAmount', state.totalAmount);
-            let itemIndex = state.cartItems.findIndex(
-                (item) => item.type === payload.payload.type
+            state.totalQuantity--;
+            state.totalAmount -= action.payload.price;
+            // let existingItem;
+            // state.cartItems.forEach((item) => {
+            //     console.log('ITEM', item);
+            //     if (item.id === action.payload.id) {
+            //         existingItem = item;
+            //     }
+            // });
+            // console.log('existingItem', existingItem);
+            const existingItem = state.cartItems.find(
+                (item) => item.id === action.payload.id
             );
-            let item = state.cartItems[itemIndex];
-            console.log('ITEM IN REMOVE', item);
-            if (item.quantity === 1) {
+            console.log('REMOVE ITEM', existingItem);
+            if (existingItem.quantity === 1) {
                 state.cartItems = state.cartItems.filter(
-                    (item) => item.title !== payload.payload.title
+                    (item) => item.id !== action.payload.id
                 );
             } else {
                 // keep item in cart but decrease amount
-                item.quantity = item.quantity - 1;
-                item.total -= item.price;
-                state.cartItems[itemIndex] = item;
+                existingItem.quantity--;
+                existingItem.totalPrice -= existingItem.price;
                 console.log('UPDATED ITEMS', state.cartItems);
             }
+            console.log(state);
         },
     },
 });

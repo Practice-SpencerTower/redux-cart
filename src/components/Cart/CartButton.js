@@ -5,7 +5,7 @@ import { cartActions } from '../../store/cart-slice';
 const CartButton = (props) => {
     const dispatch = useDispatch();
     const cartVisible = useSelector((state) => state.cartVisible);
-    const numItems = useSelector((state) => state.numItems);
+    const totalQuantity = useSelector((state) => state.totalQuantity);
 
     const toggleCartHandler = () => {
         // if cart shown, hide cart and vice-versa
@@ -19,7 +19,7 @@ const CartButton = (props) => {
     return (
         <button className={classes.button} onClick={toggleCartHandler}>
             <span>My Cart</span>
-            <span className={classes.badge}>{numItems}</span>
+            <span className={classes.badge}>{totalQuantity}</span>
         </button>
     );
 };
